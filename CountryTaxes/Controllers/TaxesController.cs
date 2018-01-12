@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using CountryTaxes.BL;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,29 +37,31 @@ namespace CountryTaxes.Controllers
             return taxManager.GetCountryTaxAtDate(countryName, date);
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // POST api/taxes/schedule/Estonia/2016-05-04/monthly/0.5
+        [HttpPost("schedule/{country}/{startDate}/{period}/{taxRate}")]
+        public IActionResult Post([FromRoute]string country,
+            [FromRoute]DateTime startDate,
+            [FromRoute]string period,
+            [FromRoute]decimal taxRate)
         {
-            return "value";
+            if (taxManager.CreateTaxSchedule(country, startDate, period, taxRate))
+            {
+                return StatusCode(200);
+            }
+
+            return StatusCode(400);
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
+        // POST api/taxes/create/Estonia
+        [HttpPost("create/{country}")]
+        public IActionResult Post([FromRoute]string country)
         {
-        }
+            if (taxManager.CreateCountry(country))
+            {
+                return StatusCode(200);
+            }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return StatusCode(400);
         }
     }
 }

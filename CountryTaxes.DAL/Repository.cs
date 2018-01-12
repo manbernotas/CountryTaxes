@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CountryTaxes.DAL
 {
@@ -20,6 +18,37 @@ namespace CountryTaxes.DAL
             var countryList = context.Country.Include("Taxes");
 
             return countryList.ToList();
+        }
+
+        public bool SaveTax(Tax tax)
+        {
+            try
+            {
+                context.Tax.Add(tax);
+                context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool SaveCountry(Country country)
+        {
+            try
+            {
+                context.Country.Add(country);
+                context.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
+            
+
+            return true;
         }
     }
 }
