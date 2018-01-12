@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CountryTaxes.BL\CountryTaxes.BL.csproj" />
     <ProjectReference Include="..\CountryTaxes.DAL\CountryTaxes.DAL.csproj" />
   </ItemGroup>
 

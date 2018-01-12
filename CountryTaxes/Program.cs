@@ -24,6 +24,7 @@ namespace CountryTaxes.Service
                 try
                 {
                     var context = services.GetRequiredService<DAL.TaxContext>();
+                    //context.Database.EnsureDeleted();
                     context.Database.EnsureCreated();
 
                     context.SaveChanges();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CountryTaxes.BL;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CountryTaxes.Controllers
@@ -9,11 +10,33 @@ namespace CountryTaxes.Controllers
     [Route("api/[controller]")]
     public class TaxesController : Controller
     {
-        // GET api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly DAL.TaxContext context;
+        private TaxManager taxManager;
+
+        public TaxesController(DAL.TaxContext context)
         {
-            return new string[] { "value1", "value2" };
+            this.context = context;
+            taxManager = new TaxManager(this.context);
+        }
+        // GET api/taxes
+        [HttpGet]
+        public List<string> GetCountryNamesList()
+        {
+            return taxManager.GetCountryNamesList();
+        }
+
+        // GET api/taxes/Estonia
+        [HttpGet("{countryName}")]
+        public List<DAL.Tax> GetCountryTaxes(string countryName)
+        {
+            return taxManager.GetCountryTaxes(countryName);
+        }
+
+        // GET api/taxes/Estonia/2016-05-04
+        [HttpGet("{countryName}/{date}")]
+        public decimal GetCountryTaxesAtDate(string countryName, DateTime date)
+        {
+            return taxManager.GetCountryTaxAtDate(countryName, date);
         }
 
         // GET api/values/5
